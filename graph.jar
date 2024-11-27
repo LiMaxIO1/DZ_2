@@ -1,0 +1,7 @@
+@startuml
+  package "com.example:my-package:1.0.0" {
+    [org.springframework:spring-core:5.3.10]
+    [org.springframework:spring-beans:5.3.10]
+    [org.springframework:spring-context:5.3.10]
+  }
+@enduml
