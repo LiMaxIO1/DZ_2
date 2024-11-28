@@ -1,6 +1,0 @@
-{
-  "visualization_program_path": "graph.jar",
-  "package_name": "com.example:my-package:1.0.0",
-  "output_image_path": "dependencies_graph.png",
-  "repository_url": "https://repo.maven.apache.org/maven2"
-}

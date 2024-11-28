@@ -1,49 +1,31 @@
 import json
-import os
-import subprocess
-import requests
+import sys
+from dependency_parser import parse_dependencies
+from graph_generator import generate_plantuml
+from visualizer import visualize_graph
 
-# Чтение конфигурации
-with open('config.json') as f:
-    config = json.load(f)
+def main(config_path):
+    try:
+        # Чтение конфигурации
+        with open(config_path, 'r') as file:
+            config = json.load(file)
 
-visualization_program_path = config['visualization_program_path']
-package_name = config['package_name']
-output_image_path = config['output_image_path']
-repository_url = config['repository_url']
+        # Извлечение зависимостей
+        dependencies = parse_dependencies(config["repository_url"], config["package_name"])
 
-# Функция для получения зависимостей пакета
-def get_dependencies(package_name, repository_url):
-    # В реальной задаче нужно парсить POM или использовать Maven API
-    # Для простоты, предположим, что зависимости можно получить по URL
-    url = f"{repository_url}/{package_name.replace(':', '/')}/maven-metadata.xml"
-    response = requests.get(url)
-    if response.status_code == 200:
-        # Разобрать XML и получить зависимости
-        return []  # Вернуть список зависимостей
-    return []
+        # Генерация графа PlantUML
+        plantuml_path = generate_plantuml(dependencies, config["output_path"])
 
-# Генерация файла PlantUML
-def generate_plantuml_file(dependencies, output_file):
-    with open(output_file, 'w') as f:
-        f.write("@startuml\n")
-        f.write(f"package \"{package_name}\" {{\n")
-        for dep in dependencies:
-            f.write(f"  [{dep}]\n")
-        f.write("}\n")
-        f.write("@enduml\n")
+        # Визуализация графа
+        visualize_graph(config["visualizer_path"], plantuml_path)
 
-# Получение зависимостей
-dependencies = get_dependencies(package_name, repository_url)
+        print("Граф зависимостей успешно создан!")
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        sys.exit(1)
 
-# Генерация файла PlantUML
-puml_file = 'dependencies_graph.puml'
-generate_plantuml_file(dependencies, puml_file)
-
-# Визуализация с помощью PlantUML
-subprocess.run([visualization_program_path, puml_file])
-
-# Перемещение файла в нужную директорию
-os.rename('dependencies_graph.png', output_image_path)
-
-print(f"Граф зависимостей успешно сохранен в {output_image_path}")
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <config.json>")
+        sys.exit(1)
+    main(sys.argv[1])
