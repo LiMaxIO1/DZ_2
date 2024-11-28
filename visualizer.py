@@ -34,11 +34,10 @@ class DependencyVisualizer:
         return graph
 
     def generate_plantuml(self, graph):
-        lines = ["@startuml", "digraph dependencies {"]
+        lines = ["@startuml"]
         for node, dependencies in graph.items():
             for dep in dependencies:
-                lines.append(f'"{node}" -> "{dep}"')
-        lines.append("}")
+                lines.append(f'"{node}" --> "{dep}"')
         lines.append("@enduml")
 
         output_file = Path("dependencies.puml")
@@ -50,13 +49,25 @@ class DependencyVisualizer:
         output_path = self.config['output_path']
         plantuml_path = self.config['plantuml_path']
 
-        subprocess.run(["java", "-jar", plantuml_path, plantuml_file], check=True)
-        print(f"Graph saved to {output_path}")
+        # Проверяем, что файл действительно существует
+        if not os.path.exists(plantuml_file):
+            print(f"Error: PlantUML file {plantuml_file} does not exist.")
+            return
+
+        try:
+            subprocess.run(["java", "-jar", plantuml_path, plantuml_file], check=True)
+            print(f"Graph saved to {output_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error during PlantUML execution: {e}")
 
     def run(self):
         dependencies_file = self.download_dependencies_file()
         graph = self.parse_dependencies(dependencies_file)
+
+        # Сначала генерируем .puml файл
         plantuml_file = self.generate_plantuml(graph)
+
+        # Теперь рендерим граф, используя существующий .puml файл
         self.render_graph(plantuml_file)
 
 
