@@ -1,0 +1,5 @@
+@startuml
+"project-a" --> "library-x"
+"project-a" --> "library-y"
+"library-x" --> "library-z"
+@enduml

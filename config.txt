@@ -1,6 +1,0 @@
-{
-  "visualizer_path": "/plantuml-1.2024.8.jar",
-  "package_name": "DZ_2",
-  "output_path": "./dependency_graph.png",
-  "repository_url": "https://github.com/LiMaxIO1/DZ_2"
-}
