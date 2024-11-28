@@ -1,1 +1,20 @@
-{}
+{
+    "dependencies": [
+        {
+            "name": "project-a",
+            "dependencies": ["library-x", "library-y"]
+        },
+        {
+            "name": "library-x",
+            "dependencies": ["library-z"]
+        },
+        {
+            "name": "library-y",
+            "dependencies": []
+        },
+        {
+            "name": "library-z",
+            "dependencies": []
+        }
+    ]
+}
