@@ -59,11 +59,13 @@ java -version
 
 json
 Copy code
+```bash
 {
   "plantuml_path": "plantuml.jar",
   "output_path": "dependencies.png",
   "url": "https://example.com/dependencies.json"
 }
+```
 
 plantuml_path — путь к файлу plantuml.jar.
 output_path — путь для сохранения сгенерированного изображения.
@@ -75,6 +77,7 @@ url — URL-адрес для загрузки данных о зависимо�
 
 json
 Copy code
+```bash
 {
   "dependencies": [
     {
@@ -95,6 +98,7 @@ Copy code
     }
   ]
 }
+```
 
 ### Команда для запуска
 bash
